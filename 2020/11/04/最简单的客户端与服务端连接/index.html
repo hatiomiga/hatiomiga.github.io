@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>如何使用Java实现最简单的客户端与服务端连接 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="服务器端操作1.建立一个服务器端口这里我们需要使用到Java中的ServerSocket（服务端插槽）方法。使用时需要端口号，此次练习使用9999为端口号 这里如果只是这样写的话这里程序会报错，我们用try,catch捕获来解决此问题,之后步骤中的代码都需要写在try方法的代码块中 12345try&amp;#123;    ServerSocket s1&#x3D;new ServerSocket(9999);&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用Java实现最简单的客户端与服务端连接">
+<meta property="og:url" content="http://example.com/2020/11/04/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%9E%E6%8E%A5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="服务器端操作1.建立一个服务器端口这里我们需要使用到Java中的ServerSocket（服务端插槽）方法。使用时需要端口号，此次练习使用9999为端口号 这里如果只是这样写的话这里程序会报错，我们用try,catch捕获来解决此问题,之后步骤中的代码都需要写在try方法的代码块中 12345try&amp;#123;    ServerSocket s1&#x3D;new ServerSocket(9999);&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-04T10:21:24.000Z">
+<meta property="article:modified_time" content="2020-11-04T12:03:05.779Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-最简单的客户端与服务端连接" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/04/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%9E%E6%8E%A5/" class="article-date">
+  <time datetime="2020-11-04T10:21:24.000Z" itemprop="datePublished">2020-11-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何使用Java实现最简单的客户端与服务端连接
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="服务器端操作"><a href="#服务器端操作" class="headerlink" title="服务器端操作"></a>服务器端操作</h1><h2 id="1-建立一个服务器端口"><a href="#1-建立一个服务器端口" class="headerlink" title="1.建立一个服务器端口"></a>1.建立一个服务器端口</h2><p>这里我们需要使用到Java中的ServerSocket（服务端插槽）方法。<br>使用时需要端口号，此次练习使用9999为端口号</p>
+<p>这里如果只是这样写的话这里程序会报错，我们用try,catch捕获来解决此问题,<br>之后步骤中的代码都需要写在try方法的代码块中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    ServerSocket s1=<span class="keyword">new</span> ServerSocket(<span class="number">9999</span>);</span><br><span class="line">&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-等待客户端连接"><a href="#2-等待客户端连接" class="headerlink" title="2.等待客户端连接"></a>2.等待客户端连接</h2><p>这里我们需要使用到ServerSocket中的accept方法，这里的accept方法我们使用Socket进行接收，<br>至于为什么下面会进行解释</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket socket = s1.accept();</span><br></pre></td></tr></table></figure>
+<h2 id="3-读取客户端消息"><a href="#3-读取客户端消息" class="headerlink" title="3.读取客户端消息"></a>3.读取客户端消息</h2><p>既然是读取消息，这里我们使用IO流中的getInputStream方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">InputStream is= socket.getInputStream();</span><br></pre></td></tr></table></figure>
+<p>##4.管道流<br>这里我们使用ByteArrayOutputStream（字节数组输出流），<br>创建一个缓冲区来接收（buffer）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"><span class="keyword">byte</span>[] buffer=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> len;</span><br><span class="line"><span class="keyword">while</span> ((len=is.read(buffer))!=-<span class="number">1</span>)&#123;</span><br><span class="line">    baos.write(buffer,<span class="number">0</span>,len);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(baos.toString());</span><br></pre></td></tr></table></figure>
+<h2 id="5-关闭资源"><a href="#5-关闭资源" class="headerlink" title="5.关闭资源"></a>5.关闭资源</h2><p>在程序的最后，不要忘记关闭资源，释放所占用的空间，节省不必要的消耗</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">baos.close();</span><br><span class="line">is.close();</span><br><span class="line">socket.close();</span><br><span class="line">s1.close();</span><br></pre></td></tr></table></figure>
+<h1 id="服务器端代码最终完成如下所示"><a href="#服务器端代码最终完成如下所示" class="headerlink" title="服务器端代码最终完成如下所示"></a>服务器端代码最终完成如下所示</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> NetworkProgramm.TCP_IP.Demo01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpServerDemo01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//创建一个地址</span></span><br><span class="line">            ServerSocket s1=<span class="keyword">new</span> ServerSocket(<span class="number">9999</span>);</span><br><span class="line">            <span class="comment">//等待客户连接</span></span><br><span class="line">            Socket socket = s1.accept();</span><br><span class="line">            <span class="comment">//读取客户端消息</span></span><br><span class="line">            InputStream is= socket.getInputStream();</span><br><span class="line"></span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            <span class="keyword">byte</span>[] buffer=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="keyword">int</span> len;</span><br><span class="line">            <span class="keyword">while</span> ((len=is.read(buffer))!=-<span class="number">1</span>)&#123;</span><br><span class="line">                baos.write(buffer,<span class="number">0</span>,len);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(baos.toString());</span><br><span class="line">            <span class="comment">//关闭资源</span></span><br><span class="line">            baos.close();</span><br><span class="line">            is.close();</span><br><span class="line">            socket.close();</span><br><span class="line">            s1.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="客户端操作"><a href="#客户端操作" class="headerlink" title="客户端操作"></a>客户端操作</h1><h2 id="1-连接服务器"><a href="#1-连接服务器" class="headerlink" title="1.连接服务器"></a>1.连接服务器</h2><p>想要连接服务器首先需要知道服务器的地址和端口号，这里的地址使用的是每个人都可以使用的本机地址127.0.0.1，<br>而端口号则是上文中使用的9999</p>
+<p>Java中的InetAddress类的对象可用于IP地址和域名，所以这里我们使用InetAddress类中的getByName方法，<br>在getByName后输入要连接的地址即可（这里为本机地址）</p>
+<p>这里如果只是这样写的话这里程序会报错，我们用try,catch捕获来解决此问题,<br>之后步骤中的代码都需要写在try方法的代码块中</p>
+<p>紧接着设置端口号的变量，将9999赋值给它</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    InetAddress a1=InetAddress.getByName(<span class="string">&quot;127.0.0.1&quot;</span>);</span><br><span class="line">    <span class="keyword">int</span> port=<span class="number">9999</span>;</span><br><span class="line">&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-创建与服务器端链接"><a href="#2-创建与服务器端链接" class="headerlink" title="2.创建与服务器端链接"></a>2.创建与服务器端链接</h2><p>这里我们使用Socket方法进行连接,将之前创建的IP和端口号参数放入即可<br>ps.此处的Socket即为之前服务器端用于接收ServerSocket中的accept方法，<br>这样便可以使客户端与服务器端相连</p>
+<p>写完之后会发现Socket方法报错，这是因为Socket方法的异常与InetAddress方法的异常不同<br>这里我们只要将之前出现的UnknownHostException改为Exception即可</p>
+<p>ps.这里可以在Java的数据库中看到Socket方法的各种重载，此方法默认是无参的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket socket=<span class="keyword">new</span> Socket(a1,port);</span><br></pre></td></tr></table></figure>
+
+<p>##3.发送消息<br>既然是发送消息，这里我们使用IO流中的getOutputStream方法，这里我们输出一条“Hello World”语句</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OutputStream os=socket.getOutputStream();</span><br><span class="line">os.write(<span class="string">&quot;Hello World&quot;</span>.getBytes());</span><br></pre></td></tr></table></figure>
+<p>##4.关闭资源<br>在程序的最后，不要忘记关闭资源，释放所占用的空间，节省不必要的消耗</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">os.close();</span><br><span class="line">socket.close();</span><br></pre></td></tr></table></figure>
+<h1 id="客户端代码最终完成如图所示"><a href="#客户端代码最终完成如图所示" class="headerlink" title="客户端代码最终完成如图所示"></a>客户端代码最终完成如图所示</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> NetworkProgramm.TCP_IP.Demo01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.InetAddress;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.net.UnknownHostException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TcpClientDemo01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//知道服务器的地址和端口号</span></span><br><span class="line">            InetAddress a1=InetAddress.getByName(<span class="string">&quot;127.0.0.1&quot;</span>);</span><br><span class="line">            <span class="keyword">int</span> port=<span class="number">9999</span>;</span><br><span class="line">            <span class="comment">//创建Socket链接</span></span><br><span class="line">            Socket socket=<span class="keyword">new</span> Socket(a1,port);</span><br><span class="line">            <span class="comment">//发送消息</span></span><br><span class="line">            OutputStream os=socket.getOutputStream();</span><br><span class="line">            os.write(<span class="string">&quot;Hello World&quot;</span>.getBytes());</span><br><span class="line">            <span class="comment">//关闭资源</span></span><br><span class="line">            os.close();</span><br><span class="line">            socket.close();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/11/04/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%9E%E6%8E%A5/" data-id="ckh3cmbwx0000rouzdren5uvy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/11/03/post-title/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">post title</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/04/%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%9E%E6%8E%A5/">如何使用Java实现最简单的客户端与服务端连接</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/03/post-title/">post title</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/03/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
