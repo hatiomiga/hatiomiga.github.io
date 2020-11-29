@@ -64,6 +64,112 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-mysql命令行基本操作" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/29/mysql%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" class="article-date">
+  <time datetime="2020-11-29T11:12:58.000Z" itemprop="datePublished">2020-11-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/29/mysql%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">mysql命令行基本操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>– 创建数据库</p>
+<p>CREATE DATABASE IF NOT EXISTS `数据库名`</p>
+<p>– 删除数据库</p>
+<p>DROP DATABASE IF EXISTS `数据库名`</p>
+<p>– 使用数据库</p>
+<p>USE `数据库名`</p>
+<p>– 查看所有数据库</p>
+<p>SHOW DATABASES</p>
+<p>– 创建数据库表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS &#96;表名&#96;(</span><br><span class="line">&#96;字段名&#96; 字段属性 NOT NULL DEFAULT 初始值 AUTO_INCREMENT COMMENT &#96;注释&#96;,</span><br><span class="line">...</span><br><span class="line">PRIMARY KEY(&#96;字段名&#96;)</span><br><span class="line">)ENGINE&#x3D;INNODB DEFAULT CHARSET&#x3D;utf8</span><br></pre></td></tr></table></figure>
+
+
+<p>– 查看已存在数据库的语句</p>
+<p>SHOW CREATE DATABASE `表名`</p>
+<p>–查看数据表的定义语句</p>
+<p>SHOW CREATE TABLE `表名`</p>
+<p>– 查看表的具体结构</p>
+<p>DESC `表名`</p>
+<p>– 修改表名</p>
+<p>ALTER TABLE `旧表名` RENAME `新表名`</p>
+<p>– 增加表的字段</p>
+<p>ALTER TABLE `表名` ADD `字段名` 字段属性</p>
+<p>– 修改表的字段</p>
+<p>ALTER TABLE `表名` MODIFY `字段名` 字段属性<br>ALTER TABLE `表名` CHANGE `旧字段名` `新字段名` 字段属性</p>
+<p>– 删除表的字段</p>
+<p>ALTER TABLE `表名` DROP `字段名`</p>
+<p>– 删除表</p>
+<p>DROP TABLE IF EXISTS `表名`</p>
+<p>#外键(了解即可)</p>
+<p>– 外键</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &#96;grade&#96;(</span><br><span class="line">&#96;grade_id&#96; INT(10) NOT NULL AUTO_INCREMENT COMMENT &#39;年级id&#39;,</span><br><span class="line">&#96;grade_name&#96; VARCHAR(10) NOT NULL COMMENT &#39;年级名&#39;,</span><br><span class="line">PRIMARY KEY (&#96;grade_id&#96;)</span><br><span class="line">)ENGINE&#x3D;INNODB DEFAULT CHARSET&#x3D;utf8</span><br><span class="line"></span><br><span class="line">CREATE TABLE IF NOT EXISTS &#96;student&#96;(</span><br><span class="line">&#96;id&#96; INT(4) NOT NULL AUTO_INCREMENT COMMENT &#39;学号&#39;,</span><br><span class="line">&#96;name&#96; VARCHAR(30) NOT NULL DEFAULT &#39;匿名&#39; COMMENT &#39;姓名&#39;,</span><br><span class="line">&#96;password&#96; INT(5) NOT NULL DEFAULT 00000 COMMENT &#39;密码&#39;,</span><br><span class="line">&#96;sex&#96; VARCHAR(2) NOT NULL DEFAULT &#39;男&#39; COMMENT &#39;性别&#39;,</span><br><span class="line">&#96;grade_id&#96; INT(10) NOT NULL COMMENT &#39;年级&#39;,</span><br><span class="line">PRIMARY KEY(&#96;id&#96;),</span><br><span class="line">-- 定义外键</span><br><span class="line">KEY &#96;FK_grade_id&#96; (&#96;grade_id&#96;),</span><br><span class="line">-- 执行引用</span><br><span class="line">CONSTRAINT &#96;FK_grade_id&#96; FOREIGN KEY (&#96;grade_id&#96;) REFERENCES &#96;grade&#96; (&#96;grade_id&#96;)</span><br><span class="line">)ENGINE&#x3D;INNODB DEFAULT CHARSET&#x3D;utf8</span><br></pre></td></tr></table></figure>
+
+<p>– 创建表时没有外键关系</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE 表名</span><br><span class="line">ADD CONSTRAINT 约束名 FOREIGN KEY (作为外键的列) REFERENCES 被连接的表 (被连接表的字段);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/11/29/mysql%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" data-id="cki31qi0r0001iguzhoiuetqx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-HTML图片居中" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/23/HTML%E5%9B%BE%E7%89%87%E5%B1%85%E4%B8%AD/" class="article-date">
+  <time datetime="2020-11-23T13:33:46.000Z" itemprop="datePublished">2020-11-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/23/HTML%E5%9B%BE%E7%89%87%E5%B1%85%E4%B8%AD/">HTML图片居中</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/11/23/HTML%E5%9B%BE%E7%89%87%E5%B1%85%E4%B8%AD/" data-id="cki31qi0m0000iguzfjq7falq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java-IO" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/11/19/Java-IO/" class="article-date">
@@ -311,6 +417,14 @@
       <ul>
         
           <li>
+            <a href="/2020/11/29/mysql%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">mysql命令行基本操作</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/HTML%E5%9B%BE%E7%89%87%E5%B1%85%E4%B8%AD/">HTML图片居中</a>
+          </li>
+        
+          <li>
             <a href="/2020/11/19/Java-IO/">Java IO</a>
           </li>
         
@@ -320,10 +434,6 @@
         
           <li>
             <a href="/2020/11/03/post-title/">post title</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/03/hello-world/">Hello World</a>
           </li>
         
       </ul>
